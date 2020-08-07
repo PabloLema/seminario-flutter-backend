@@ -7,13 +7,13 @@ let userSchema = new Schema({
     name: {
         type: String
     },
-    phone: {
-        type: String
-    },
     email: {
         type: String,
         unique: true,
         required: true
+    },
+    phone: {
+        type: String
     },
     password: {
         type: String,
