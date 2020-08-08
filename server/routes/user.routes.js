@@ -12,6 +12,9 @@ const _ = require('underscore');
 // Models Import
 const User = require('../models/user');
 
+// Middleware Import
+const { tokenCheck } = require('../middleware/authentication');
+
 // Register user
 app.post('/user', (req, res) => {
     let body = req.body;
@@ -68,6 +71,22 @@ app.post('/login', (req, res) => {
             statusMessage: 'Successful',
             user: userDB,
             token
+        });
+    });
+});
+
+// Ger session data
+app.get('/session', [tokenCheck], (req, res) => {
+    let id = req.user._id;
+    User.findById(id, (err, userDB) => {
+        if (err) {
+            return res.status(400).send({
+                statusMessage: 'Bad Request'
+            });
+        }
+        return res.status(200).send({
+            statusMessage: 'Successful',
+            user: userDB,
         });
     });
 });
