@@ -16,5 +16,9 @@ let productSchema = new Schema({
         type: String,
         default: 'flutter-img'
     },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
 });
 module.exports = mongoose.model('Product', productSchema);
