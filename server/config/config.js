@@ -1,9 +1,9 @@
 /*jshint esversion: 6 */
 
 // GLOBAL VARIABLES
-process.env.PORT = process.env.PORT || 3000;
+process.env.PORT = process.env.PORT || 3020;
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
-process.env.SEED = process.env.SEED || 'vnMio-gh23wd';
+process.env.SEED = process.env.SEED || 'g3mu0-hzs40';
 process.env.UNIQID = 'seminario-';
 
 let urlDB;
