@@ -19,9 +19,9 @@ let userSchema = new Schema({
         type: String,
         required: true
     },
-    facebook: {
-        type: Boolean,
-        default: false
+    img: {
+        type: String,
+        default: 'flutter-img'
     },
     date: {
         type: Date,

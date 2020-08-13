@@ -16,6 +16,10 @@ let productSchema = new Schema({
         type: String,
         default: 'flutter-img'
     },
+    date: {
+        type: Date,
+        default: Date.now
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'

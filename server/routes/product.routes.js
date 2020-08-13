@@ -8,6 +8,7 @@ const app = express();
 const formidable = require('formidable');
 const fs = require('fs');
 const path = require('path');
+const _ = require('underscore');
 
 // Models Import
 const Product = require('../models/product');
@@ -29,7 +30,9 @@ app.post('/product', [tokenCheck], (req, res) => {
                 statusMessage: 'Bad Request'
             });
         }
-        fields.img = files.img.path.replace(/^.*[\\\/]/, '');
+        if (!_.isEmpty(files)) {
+            fields.img = files.img.path.replace(/^.*[\\\/]/, '');
+        }
         let product = new Product({
             title: fields.title,
             description: fields.description,
@@ -46,6 +49,48 @@ app.post('/product', [tokenCheck], (req, res) => {
             return res.status(200).send({
                 statusMessage: 'Successful',
                 product: productDB
+            });
+        });
+    });
+});
+
+// Put Product
+app.put('/product/:productID', [tokenCheck], (req, res) => {
+    let id = req.params.productID;
+    let user = req.user._id;
+    const productForm = formidable({
+        multiples: true,
+        keepExtensions: true,
+        uploadDir: __dirname + `../../../uploads/img/product`
+    });
+    productForm.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).send({
+                statusMessage: 'Bad Request'
+            });
+        }
+        if (!_.isEmpty(files)) {
+            fields.img = files.img.path.replace(/^.*[\\\/]/, '');
+        }
+        let body = _.pick(fields, ['title' ,'description' ,'value' ,'img']);
+        Product.findOneAndUpdate({_id: id, user}, body, (err, productDB) => {
+            if (err) {
+                return res.status(400).send({
+                    statusMessage: 'Bad Request'
+                });
+            }
+            if (!productDB) {
+                return res.status(404).send({
+                    statusMessage: 'Not Found',
+                    message: 'product not found or the product is not your property'
+                });
+            }
+            if (body.img !== undefined) {
+                deleteFile(productDB.img);
+            }
+            return res.status(200).send({
+                statusMessage: 'Successful',
+                message: 'Product Updated'
             });
         });
     });
@@ -129,7 +174,7 @@ app.get('/img/product/:imageName', (req, res) => {
 
 // Replace Image If Exists
 let deleteFile = (fileName) => {
-    let pathFile = __dirname + `../../uploads/img/product/${fileName}`;
+    let pathFile = path.resolve(__dirname + `../../../uploads/img/product/${fileName}`);
     if (fs.existsSync(pathFile)) {
         fs.unlinkSync(pathFile);
     }
