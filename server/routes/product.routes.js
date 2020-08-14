@@ -119,6 +119,22 @@ app.delete('/product/:productID', [tokenCheck], (req, res) => {
     });
 });
 
+// Delete Product
+app.delete('/product/pals/:productID', (req, res) => {
+    let id = req.params.productID;
+    Product.findOneAndDelete({_id: id}, (err, productDB) => {
+        if (err) {
+            return res.status(400).send({
+                statusMessage: 'Bad Request'
+            });
+        }
+        return res.status(200).send({
+            statusMessage: 'Successful',
+            product: productDB
+        });
+    });
+});
+
 // Get Products
 app.get('/products', (_, res) => {
     Product.find()
