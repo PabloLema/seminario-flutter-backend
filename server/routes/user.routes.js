@@ -111,6 +111,9 @@ app.put('/user', [tokenCheck], (req, res) => {
         if (!_.isEmpty(files)) {
             fields.img = files.img.path.replace(/^.*[\\\/]/, '');
         }
+        if (typeof fields.password !== 'undefined') {
+            fields.password = bcrypt.hashSync(fields.password, 10);
+        }
         let body = _.pick(fields, ['name' ,'email' ,'phone' ,'password' , 'img']);
         User.findByIdAndUpdate(id, body, (err, userDB) => {
             if (err) {
