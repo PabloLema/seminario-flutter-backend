@@ -33,7 +33,6 @@ app.post('/product', [tokenCheck], (req, res) => {
         if (!_.isEmpty(files)) {
             fields.img = files.img.path.replace(/^.*[\\\/]/, '');
         }
-        console.log(fields);
         let product = new Product({
             title: fields.title,
             description: fields.description,
