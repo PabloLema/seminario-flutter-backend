@@ -138,6 +138,7 @@ app.delete('/product/pals/:productID', (req, res) => {
 // Get Products
 app.get('/products', (_, res) => {
     Product.find()
+    .limit(15)
         .populate('user')
         .exec((err, products) => {
             if (err) {
