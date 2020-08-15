@@ -138,9 +138,9 @@ app.delete('/product/pals/:productID', (req, res) => {
 // Get Products
 app.get('/products', (_, res) => {
     Product.find()
-    .sort([
-        ['_id', -1]
-    ])
+    // .sort([
+    //     ['_id', -1]
+    // ])
     .limit(15)
         .populate('user')
         .exec((err, products) => {
