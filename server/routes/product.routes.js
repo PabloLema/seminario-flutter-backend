@@ -141,7 +141,31 @@ app.get('/products', (_, res) => {
     // .sort([
     //     ['_id', -1]
     // ])
-    .limit(15)
+    .limit(10)
+        .populate('user')
+        .exec((err, products) => {
+            if (err) {
+                return res.status(400).send({
+                    statusMessage: 'Bad Request'
+                });
+            }
+            Product.countDocuments({}, (err, totalRecords) => {
+                return res.status(200).send({
+                    statusMessage: 'Successful',
+                    totalRecords,
+                    list: products
+                });
+            });
+        });
+});
+
+// Get Products
+app.get('/products/desc', (_, res) => {
+    Product.find()
+    .sort([
+        ['_id', -1]
+    ])
+    .limit(10)
         .populate('user')
         .exec((err, products) => {
             if (err) {
